@@ -16,6 +16,8 @@ textures = {
 
     }
 
+background_image = pygame.image.load('background.png')
+
 class Raycaster(object):
     def __init__(self,screen):
         self.screen = screen
@@ -126,6 +128,17 @@ screen.set_alpha(None)
 clock = pygame.time.Clock()
 font = pygame.font.SysFont("Arial", 30)
 
+def draw_text(text, font, color, x, y):
+    textobj = font.render(text, 1, color)
+    textrect = textobj.get_rect()
+    textrect.topleft = (x,y)
+    return textobj
+
+def menu(screen):
+    while True:
+        screen.fill((0,0,0))
+        draw_text('Menu', font, (255,255,255), screen, 20, 20)
+
 def updateFPS():
     fps = str(int(clock.get_fps()))
     fps = font.render(fps, 1, pygame.Color("white"))
@@ -133,6 +146,21 @@ def updateFPS():
 
 r = Raycaster(screen)
 r.load_map('map2.txt')
+
+
+
+isPaused = True
+while isPaused:
+    for ev in pygame.event.get():
+        if ev.type == pygame.QUIT:
+            isPaused = False
+    
+    screen.fill(pygame.Color("white"))
+    background_image = pygame.transform.scale(background_image, (r.width, r.height))
+    screen.blit(background_image, (0,0))
+    pygame.display.update()
+
+
 
 isRunning = True
 while isRunning:
@@ -171,18 +199,22 @@ while isRunning:
             if r.map[j][i] == ' ':
                 r.player['x'] = newX
                 r.player['y'] = newY
+    
 
-    screen.fill(pygame.Color("gray")) #Fondo
+    #Fondo
+    screen.fill(pygame.Color("gray")) 
 
-    #Techo
+    # Techo
     screen.fill(pygame.Color("saddlebrown"), (int(r.width / 2), 0, int(r.width / 2),int(r.height / 2)))
     
-    #Piso
+    # Piso
     screen.fill(pygame.Color("dimgray"), (int(r.width / 2), int(r.height / 2), int(r.width / 2),int(r.height / 2)))
 
     r.render()
     
     # FPS
+    screen.fill(pygame.Color("black"), (250,250, 100, 100))
+    screen.blit(draw_text("Menu", font, pygame.Color("white"), 0,0), (250,250))
     screen.fill(pygame.Color("black"), (0,0,30,30))
     screen.blit(updateFPS(), (0,0))
     clock.tick(30)  
