@@ -127,6 +127,7 @@ screen = pygame.display.set_mode((1000,500), pygame.DOUBLEBUF | pygame.HWACCEL) 
 screen.set_alpha(None)
 clock = pygame.time.Clock()
 font = pygame.font.SysFont("Arial", 30)
+title_font = pygame.font.SysFont("./CoveredByYourGrace-Regular.tff", 50)
 
 def draw_text(text, font, color, x, y):
     textobj = font.render(text, 1, color)
@@ -148,21 +149,53 @@ r = Raycaster(screen)
 r.load_map('map2.txt')
 
 
-
 isPaused = True
+isRunning = True
 while isPaused:
+    mouse = pygame.mouse.get_pos()
+
     for ev in pygame.event.get():
         if ev.type == pygame.QUIT:
             isPaused = False
+            isRunning = False
+        if ev.type == pygame.MOUSEBUTTONDOWN:
+            if r.width/2-120 <= mouse[0] <= r.width/2+120 and r.height/2-20 <= mouse[1] <= r.height/2+20:
+                isPaused=False 
+            if 380 <= mouse[0] <= 630 and 317 <= mouse[1] <= 357: 
+                isPaused=False
+                isRunning=False
+        
+
+    
     
     screen.fill(pygame.Color("white"))
+
     background_image = pygame.transform.scale(background_image, (r.width, r.height))
     screen.blit(background_image, (0,0))
+
+    
+    if r.width/2-120 <= mouse[0] <= r.width/2+120 and r.height/2-20 <= mouse[1] <= r.height/2+20: 
+        pygame.draw.rect(screen,pygame.Color('gray'),[r.width/2-120,r.height/2-20,240,40]) 
+    else:
+        pygame.draw.rect(screen,pygame.Color('brown'),[r.width/2-120,r.height/2-20,240,40])
+
+    if 380 <= mouse[0] <= 630 and 317 <= mouse[1] <= 357: 
+        pygame.draw.rect(screen,pygame.Color('red'),[380,317,240,40]) 
+    else:
+        pygame.draw.rect(screen,pygame.Color('brown'),[380,317,240,40]) 
+
+    t_font = title_font.render("EGYPT MAZE", True, pygame.Color("black"))
+    screen.blit(t_font, (380, 100))
+    screen.blit(draw_text("--Start--", font, pygame.Color("black"), 0,0), ((450, 230)))
+    screen.blit(draw_text("--Exit--", font, pygame.Color("black"), 0,0), ((450, 317)))
+
+
+    #screen.blit(draw_text("--Exit--", font, pygame.Color("black"), 0,0), ((450, 230)))
+
+
     pygame.display.update()
 
 
-
-isRunning = True
 while isRunning:
 
     for ev in pygame.event.get():
