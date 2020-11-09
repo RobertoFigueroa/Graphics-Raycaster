@@ -137,7 +137,7 @@ class Raycaster(object):
 
         self.drawPlayerIcon(BLACK)
 
-        for i in range(halfWidth):
+        for i in range(0, halfWidth):
             angle = self.player['angle'] - self.player['fov'] / 2 + self.player['fov'] * i / halfWidth
             dist, wallType, tx = self.castRay(angle)
 
